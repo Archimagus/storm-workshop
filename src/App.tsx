@@ -1,6 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import "./App.css";
+import { ControlsMenu } from "./components/controls-menu";
 import { HoverInfo } from "./components/hover-info";
 import { ThemeProvider } from "./components/theme-provider";
 import { Viewer } from "./components/viewer";
@@ -13,6 +14,7 @@ function App() {
         <SidebarProvider>
           <AppSidebar />
           <main className="h-full w-full">
+            <ControlsMenu />
             <Viewer />
             <SidebarTrigger />
             <HoverInfo />

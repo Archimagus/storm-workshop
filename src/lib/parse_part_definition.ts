@@ -24,6 +24,8 @@ export interface Surface {
   position: Position | null;
 }
 
+export interface BouancySurface extends Surface {}
+
 export interface LogicNode {
   orientation: number;
   label: string;
@@ -59,7 +61,7 @@ export interface Part {
   mass: number;
   value: number;
   surfaces: Surface[];
-  buoyancySurfaces: Surface[];
+  buoyancySurfaces: BouancySurface[];
   logicNodes: LogicNode[];
   voxels: Voxel[];
   connections: PartConnections;
@@ -77,6 +79,14 @@ function parseSurfaces(surfacesElement: Element | null): Surface[] {
       position: parsePosition(surface.querySelector("position")),
     })
   );
+}
+
+function parseBouancySurfaces(
+  surfacesElement: Element | null
+): BouancySurface[] {
+  if (!surfacesElement) return [];
+
+  return parseSurfaces(surfacesElement);
 }
 
 function parseLogicNodes(nodesElement: Element | null): LogicNode[] {
@@ -227,7 +237,7 @@ export function parsePartDefinition(xmlString: string): Part {
 
     // Parse nested elements
     surfaces: parseSurfaces(definition.querySelector("surfaces")),
-    buoyancySurfaces: parseSurfaces(
+    buoyancySurfaces: parseBouancySurfaces(
       definition.querySelector("buoyancy_surfaces")
     ),
     logicNodes: parseLogicNodes(definition.querySelector("logic_nodes")),
