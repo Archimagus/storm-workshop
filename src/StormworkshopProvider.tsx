@@ -1,4 +1,4 @@
-import testInput from "@/assets/button_push.xml?raw";
+import testInput from "@/assets/connector_large.xml?raw";
 import React, { ComponentProps, FC } from "react";
 import { Part, parsePartDefinition } from "./lib/parse_part_definition";
 import { HoveredObject, SubPartType } from "./lib/types";

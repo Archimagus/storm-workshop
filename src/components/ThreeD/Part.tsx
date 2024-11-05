@@ -8,23 +8,21 @@ import {
 } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
-import { Billboard, Edges, Outlines } from "@react-three/drei";
+import { Billboard, Edges } from "@react-three/drei";
 import { FC, useMemo, useState } from "react";
-import { EulerTuple } from "three";
+import { AlwaysDepth, EulerTuple, Path, Shape, ShapeGeometry } from "three";
 
 interface PartComponentProps {
   part: Part;
 }
 
-const defaultPosition = { x: 0, y: 0, z: 0 };
+const defaultPosition: [number, number, number] = [0, 0, 0];
 
-const componentPositionToLocal = (position: Position | null) => {
+const componentPositionToLocal = (
+  position: Position | null
+): [number, number, number] => {
   if (!position) return defaultPosition;
-  return {
-    x: position.x * 0.25,
-    y: position.y * 0.25,
-    z: position.z * 0.25,
-  };
+  return [position.x * 0.25, position.y * 0.25, position.z * 0.25];
 };
 /**
  * Converts the orientation of a component to the local coordinate system.
@@ -74,7 +72,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
   // Create geometries for each bouancy surface
   const bouancySurfaces = useMemo(() => {
     return part.buoyancySurfaces.map((surface, index) => {
-      return <BouancySurfaceComponent key={index} surface={surface} />;
+      return <BuoyancySurfaceComponent key={index} surface={surface} />;
     });
   }, [part.buoyancySurfaces]);
 
@@ -118,7 +116,7 @@ const VoxelComponent: FC<VoxelProps> = ({ voxel }) => {
         setHovered(false);
         setHoveredObject(null);
       }}
-      position={[position.x, position.y, position.z]}
+      position={position}
       rotation={
         voxel.physicsShapeRotation
           ? [
@@ -136,12 +134,17 @@ const VoxelComponent: FC<VoxelProps> = ({ voxel }) => {
       }
     >
       <boxGeometry args={[0.25, 0.25, 0.25]} />
-      <meshStandardMaterial color="gray" transparent opacity={0.5} />
+      <meshStandardMaterial
+        color={voxel.flags === 1 ? "gray" : "#ff7c7c"}
+        transparent={voxel.flags === 0}
+        opacity={0.25}
+      />
       <Edges
         linewidth={hovered ? 3 : 1}
         scale={1}
         threshold={80}
         color={hovered ? "#393939" : "#353535"}
+        renderOrder={3}
       />
     </mesh>
   );
@@ -158,7 +161,7 @@ const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
   if (!view.includes(SubPartType.Surface)) return null;
   return (
     <object3D
-      position={[position.x, position.y, position.z]}
+      position={position}
       rotation={rotation}
       onPointerOver={(e) => {
         e.stopPropagation();
@@ -188,6 +191,7 @@ const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
           scale={1}
           threshold={80} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
           color={hovered ? "#3577d9" : "#84cfe8"}
+          renderOrder={3}
         />
       </mesh>
     </object3D>
@@ -197,7 +201,7 @@ const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
 interface BouancySurfaceProps {
   surface: BouancySurface;
 }
-const BouancySurfaceComponent: FC<BouancySurfaceProps> = ({ surface }) => {
+const BuoyancySurfaceComponent: FC<BouancySurfaceProps> = ({ surface }) => {
   const position = componentPositionToLocal(surface.position);
   const rotation = componentOrientationToLocal(surface.orientation);
   const [hovered, setHovered] = useState(false);
@@ -205,7 +209,7 @@ const BouancySurfaceComponent: FC<BouancySurfaceProps> = ({ surface }) => {
   if (!view.includes(SubPartType.BouancySurface)) return null;
   return (
     <object3D
-      position={[position.x, position.y, position.z]}
+      position={position}
       rotation={rotation}
       onPointerOver={(e) => {
         e.stopPropagation();
@@ -225,7 +229,7 @@ const BouancySurfaceComponent: FC<BouancySurfaceProps> = ({ surface }) => {
       <mesh position={[0, 0, 0.127]}>
         <planeGeometry args={[0.25, 0.25]} />
         <meshStandardMaterial
-          color="#e88484"
+          color="#e8df75"
           side={2}
           transparent
           opacity={0.25}
@@ -234,7 +238,8 @@ const BouancySurfaceComponent: FC<BouancySurfaceProps> = ({ surface }) => {
           linewidth={hovered ? 3 : 1}
           scale={1}
           threshold={80} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
-          color={hovered ? "#975454" : "#e88484"}
+          color={hovered ? "#e8df75" : "#97914d"}
+          renderOrder={3}
         />
       </mesh>
     </object3D>
@@ -246,19 +251,82 @@ interface LogicNodeProps {
 }
 const logicNodeTypeMap: Record<
   number,
-  { logicType: string; color: string; offset: number }
+  { logicType: string; color: string; offset: number; physical: boolean }
 > = {
-  0: { logicType: "boolean", color: "#cc234a", offset: 0 },
-  1: { logicType: "number", color: "green", offset: 0 },
-  2: { logicType: "rps", color: "#ff9900", offset: 0 },
-  3: { logicType: "fluid", color: "#1480c8", offset: 0 },
-  4: { logicType: "electric", color: "#bcbc2f", offset: -0.01 },
-  5: { logicType: "composite", color: "#8000ff", offset: 0.01 },
-  6: { logicType: "video", color: "#33d2ad", offset: -0.02 },
-  7: { logicType: "audio", color: "#5d8729", offset: 0.02 },
-  8: { logicType: "rope", color: "#3b3b3b", offset: -0.03 },
+  0: { logicType: "boolean", color: "#cc234a", offset: 0, physical: false },
+  1: { logicType: "number", color: "green", offset: 0, physical: false },
+  2: { logicType: "rps", color: "#ff9900", offset: 0, physical: true },
+  3: { logicType: "fluid", color: "#1480c8", offset: 0, physical: true },
+  4: {
+    logicType: "electric",
+    color: "#bcbc2f",
+    offset: -0.01,
+    physical: false,
+  },
+  5: {
+    logicType: "composite",
+    color: "#8000ff",
+    offset: 0.01,
+    physical: false,
+  },
+  6: { logicType: "video", color: "#33d2ad", offset: -0.02, physical: false },
+  7: { logicType: "audio", color: "#5d8729", offset: 0.02, physical: false },
+  8: { logicType: "rope", color: "#3b3b3b", offset: -0.03, physical: false },
 };
 const LogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
+  const { physical } = logicNodeTypeMap[node.type];
+  if (physical) return <PhysicalLogicNodeComponent node={node} />;
+  return <LogicalLogicNodeComponent node={node} />;
+};
+
+const PhysicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
+  const position = componentPositionToLocal(node.position);
+  const rotation = componentOrientationToLocal(node.orientation);
+  const [hovered, setHovered] = useState(false);
+  const { view, setHoveredObject } = useStormworkshop();
+  if (!view.includes(SubPartType.LogicNode)) return null;
+  const { color } = logicNodeTypeMap[node.type];
+  return (
+    <group
+      position={position}
+      rotation={rotation}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+        setHoveredObject({
+          name: "Logic Node",
+          content: node,
+        });
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        setHovered(false);
+        setHoveredObject(null);
+      }}
+    >
+      <mesh renderOrder={1} position={[0, 0, 0.128]}>
+        <circleGeometry args={[0.07, 32]} />
+        <meshStandardMaterial
+          color={color}
+          emissive={color}
+          emissiveIntensity={hovered ? 0.5 : 0}
+        />
+        <Edges
+          linewidth={hovered ? 4 : 2}
+          scale={1}
+          threshold={80}
+          color={"white"}
+          renderOrder={2}
+        />
+      </mesh>
+      <mesh position={[0, 0, 0.13]}>
+        <circleGeometry args={[0.03, 32]} />
+        <meshStandardMaterial color={"#212121"} />
+      </mesh>
+    </group>
+  );
+};
+const LogicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
   const position = componentPositionToLocal(node.position);
   const [hovered, setHovered] = useState(false);
   const { view, setHoveredObject } = useStormworkshop();
@@ -267,8 +335,9 @@ const LogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
   const { color, offset } = logicNodeTypeMap[node.type];
 
   return (
-    <Billboard position={[position.x + offset, position.y, position.z]}>
+    <Billboard position={position}>
       <mesh
+        position={[offset, 0, offset]}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHovered(true);
@@ -282,22 +351,56 @@ const LogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
           setHovered(false);
           setHoveredObject(null);
         }}
+        renderOrder={1}
       >
         {node.mode === 1 ? (
-          <torusGeometry args={[0.06, 0.01]} />
+          <CircleShape />
         ) : (
-          <sphereGeometry args={[0.025, 32, 32]} />
+          <circleGeometry args={[0.025, 32]} />
         )}
         <meshStandardMaterial
           color={color}
           emissive={color}
           emissiveIntensity={hovered ? 0.5 : 0}
+          depthFunc={AlwaysDepth}
+          depthWrite={false}
+          transparent={true}
+          opacity={1}
         />
-        <Outlines
-          scale={hovered ? 1.04 : 1.02}
-          color={hovered ? "white" : "black"}
+        <Edges
+          linewidth={hovered ? 4 : 2}
+          scale={1}
+          threshold={80}
+          color={"white"}
+          renderOrder={2}
+          depthFunc={AlwaysDepth}
+          depthWrite={false}
         />
       </mesh>
     </Billboard>
   );
 };
+
+function CircleShape({
+  outerRadius = 0.07,
+  innerRadius = 0.035,
+  offset = 0,
+}: {
+  outerRadius?: number;
+  innerRadius?: number;
+  offset?: number;
+}) {
+  // Create a shape
+  const shape = useMemo(() => {
+    const shape = new Shape();
+    shape.ellipse(0, 0, outerRadius, outerRadius, 0, Math.PI * 2, true);
+    shape.holes.push(
+      new Path().ellipse(0, 0, innerRadius, innerRadius, 0, Math.PI * 2, true)
+    );
+    const geometry = new ShapeGeometry(shape);
+    geometry.translate(0, 0, offset);
+    return geometry;
+  }, []);
+
+  return <primitive object={shape} />;
+}
