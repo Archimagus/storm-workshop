@@ -5,12 +5,12 @@ import { ControlsMenu } from "./components/controls-menu";
 import { HoverInfo } from "./components/hover-info";
 import { ThemeProvider } from "./components/theme-provider";
 import { Viewer } from "./components/viewer";
-import { ModStormProvider } from "./ModStormProvider";
+import { StormworkshopProvider } from "./StormworkshopProvider";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="ModStorm-ui-theme">
-      <ModStormProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="Stormworkshop-ui-theme">
+      <StormworkshopProvider>
         <SidebarProvider>
           <AppSidebar />
           <main className="h-full w-full">
@@ -21,7 +21,7 @@ function App() {
             {/* <RawXmlOverlay /> */}
           </main>
         </SidebarProvider>
-      </ModStormProvider>
+      </StormworkshopProvider>
     </ThemeProvider>
   );
 }

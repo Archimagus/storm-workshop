@@ -7,7 +7,7 @@ import {
   Voxel,
 } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
-import { useModStorm } from "@/ModStormProvider";
+import { useStormworkshop } from "@/StormworkshopProvider";
 import { Billboard, Edges, Outlines } from "@react-three/drei";
 import { FC, useMemo, useState } from "react";
 import { EulerTuple } from "three";
@@ -101,7 +101,7 @@ interface VoxelProps {
 const VoxelComponent: FC<VoxelProps> = ({ voxel }) => {
   const position = componentPositionToLocal(voxel.position);
   const [hovered, setHovered] = useState(false);
-  const { view, setHoveredObject } = useModStorm();
+  const { view, setHoveredObject } = useStormworkshop();
   if (!view.includes(SubPartType.Voxel)) return null;
   return (
     <mesh
@@ -154,7 +154,7 @@ const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
   const position = componentPositionToLocal(surface.position);
   const rotation = componentOrientationToLocal(surface.orientation);
   const [hovered, setHovered] = useState(false);
-  const { setHoveredObject, view } = useModStorm();
+  const { setHoveredObject, view } = useStormworkshop();
   if (!view.includes(SubPartType.Surface)) return null;
   return (
     <object3D
@@ -201,7 +201,7 @@ const BouancySurfaceComponent: FC<BouancySurfaceProps> = ({ surface }) => {
   const position = componentPositionToLocal(surface.position);
   const rotation = componentOrientationToLocal(surface.orientation);
   const [hovered, setHovered] = useState(false);
-  const { setHoveredObject, view } = useModStorm();
+  const { setHoveredObject, view } = useStormworkshop();
   if (!view.includes(SubPartType.BouancySurface)) return null;
   return (
     <object3D
@@ -261,7 +261,7 @@ const logicNodeTypeMap: Record<
 const LogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
   const position = componentPositionToLocal(node.position);
   const [hovered, setHovered] = useState(false);
-  const { view, setHoveredObject } = useModStorm();
+  const { view, setHoveredObject } = useStormworkshop();
   if (!view.includes(SubPartType.LogicNode)) return null;
 
   const { color, offset } = logicNodeTypeMap[node.type];

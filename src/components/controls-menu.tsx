@@ -1,6 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SubPartType } from "@/lib/types";
-import { useModStorm } from "@/ModStormProvider";
+import { useStormworkshop } from "@/StormworkshopProvider";
 import { Box, Boxes, CircleDot, Grid2X2, Ship } from "lucide-react";
 import { useState } from "react";
 
@@ -31,7 +31,7 @@ const subPartData = {
 };
 
 export function ControlsMenu() {
-  const { view, setView } = useModStorm();
+  const { view, setView } = useStormworkshop();
   const [displayMode, setDisplayMode] = useState("solid");
 
   return (

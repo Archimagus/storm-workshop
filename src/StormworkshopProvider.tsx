@@ -1,8 +1,8 @@
-import testInput from "@/assets/connector_large.xml?raw";
+import testInput from "@/assets/button_push.xml?raw";
 import React, { ComponentProps, FC } from "react";
 import { Part, parsePartDefinition } from "./lib/parse_part_definition";
 import { HoveredObject, SubPartType } from "./lib/types";
-type ModStormContext = {
+type StormworkshopContext = {
   parts: Part[];
   setParts: React.Dispatch<React.SetStateAction<Part[]>>;
   hoveredObject: HoveredObject | null;
@@ -13,18 +13,24 @@ type ModStormContext = {
   setView: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-const ModStormContext = React.createContext<ModStormContext | null>(null);
+const StormworkshopContext = React.createContext<StormworkshopContext | null>(
+  null
+);
 
-export function useModStorm() {
-  const context = React.useContext(ModStormContext);
+export function useStormworkshop() {
+  const context = React.useContext(StormworkshopContext);
   if (!context) {
-    throw new Error("useModStorm must be used within a ModStormProvider.");
+    throw new Error(
+      "useStormworkshop must be used within a StormworkshopProvider."
+    );
   }
 
   return context;
 }
 
-export const ModStormProvider: FC<ComponentProps<"div">> = ({ children }) => {
+export const StormworkshopProvider: FC<ComponentProps<"div">> = ({
+  children,
+}) => {
   const [rawData, setRawData] = React.useState<string>(testInput);
 
   const [parts, setParts] = React.useState<Part[]>([
@@ -32,7 +38,7 @@ export const ModStormProvider: FC<ComponentProps<"div">> = ({ children }) => {
   ]);
   const [hoveredObject, setHoveredObject] = React.useState<any>(null);
   const [view, setView] = React.useState<string[]>(Object.keys(SubPartType));
-  const contextValue = React.useMemo<ModStormContext>(
+  const contextValue = React.useMemo<StormworkshopContext>(
     () => ({
       parts,
       setParts,
@@ -47,8 +53,8 @@ export const ModStormProvider: FC<ComponentProps<"div">> = ({ children }) => {
   );
 
   return (
-    <ModStormContext.Provider value={contextValue}>
+    <StormworkshopContext.Provider value={contextValue}>
       {children}
-    </ModStormContext.Provider>
+    </StormworkshopContext.Provider>
   );
 };

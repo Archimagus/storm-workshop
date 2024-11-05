@@ -1,9 +1,9 @@
-import { useModStorm } from "@/ModStormProvider";
+import { useStormworkshop } from "@/StormworkshopProvider";
 import { FC } from "react";
 import { Card, CardContent, CardHeader } from "./ui/card";
 
 export const HoverInfo: FC = () => {
-  const { hoveredObject } = useModStorm();
+  const { hoveredObject } = useStormworkshop();
   if (!hoveredObject) return null;
   return (
     <Card className="absolute top-0 right-0 pointer-events-none max-w-96">
