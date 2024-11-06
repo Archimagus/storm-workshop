@@ -33,7 +33,7 @@ export const ComponentUI: FC<ComponentUIProps> = ({ part }) => {
         <p>Type: {part.type}</p>
         <p>Mass: {part.mass}</p>
         <p>Value: {part.value}</p>
-        {missingData && (
+        {missingData.length > 0 && (
           <>
             <h3 className="text-2xl">Missing Data</h3>
             {missingData.map((mesh) => (

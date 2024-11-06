@@ -29,7 +29,7 @@ export const Viewer: React.FC = () => {
         position={[-0.625, -0.125, -0.625]}
       />
       <OrbitControls
-        minPolarAngle={0}
+        minPolarAngle={-Math.PI / 1.9}
         maxPolarAngle={Math.PI / 1.9}
         makeDefault
       />

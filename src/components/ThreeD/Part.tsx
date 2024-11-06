@@ -10,7 +10,14 @@ import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { Billboard, Edges } from "@react-three/drei";
 import { FC, useMemo, useState } from "react";
-import { AlwaysDepth, EulerTuple, Path, Shape, ShapeGeometry } from "three";
+import {
+  AlwaysDepth,
+  BackSide,
+  EulerTuple,
+  Path,
+  Shape,
+  ShapeGeometry,
+} from "three";
 
 interface PartComponentProps {
   part: Part;
@@ -55,6 +62,8 @@ const componentOrientationToLocal = (orientation: number): EulerTuple => {
 };
 
 export const PartComponent: FC<PartComponentProps> = ({ part }) => {
+  const { meshes, visibility } = useStormworkshop();
+
   // Create geometries for each voxel
   const voxels = useMemo(() => {
     return part.voxels.map((voxel, index) => {
@@ -83,12 +92,23 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
     });
   }, [part.logicNodes]);
 
+  const mesh = meshes[part.mesh_data_name];
+
   return (
     <group>
       {voxels}
       {surfaces}
       {bouancySurfaces}
       {logicNodes}
+      {mesh && visibility.includes(SubPartType.Mesh) && (
+        <mesh geometry={mesh}>
+          <meshStandardMaterial
+            color="white"
+            side={BackSide}
+            vertexColors={true}
+          />
+        </mesh>
+      )}
     </group>
   );
 };
@@ -136,8 +156,8 @@ const VoxelComponent: FC<VoxelProps> = ({ voxel }) => {
       <boxGeometry args={[0.25, 0.25, 0.25]} />
       <meshStandardMaterial
         color={voxel.flags === 1 ? "gray" : "#ff7c7c"}
-        transparent={voxel.flags === 0}
-        opacity={0.25}
+        transparent
+        opacity={voxel.flags === 0 ? 0.25 : 0.75}
       />
       <Edges
         linewidth={hovered ? 3 : 1}

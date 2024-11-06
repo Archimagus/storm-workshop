@@ -5,6 +5,7 @@ export enum SubPartType {
   BouancySurface = "BouancySurface",
   LogicNode = "LogicNode",
   Voxel = "Voxel",
+  Mesh = "Mesh",
 }
 
 export type HoveredObject = {

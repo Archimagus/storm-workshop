@@ -112,10 +112,10 @@ export function parseMesh(bin: Uint8Array): MeshData {
         readFloat32(dataView, offset + 8),
       ],
       color: [
-        bin[offset + 12],
-        bin[offset + 13],
-        bin[offset + 14],
-        bin[offset + 15],
+        bin[offset + 12] / 255,
+        bin[offset + 13] / 255,
+        bin[offset + 14] / 255,
+        bin[offset + 15] / 255,
       ],
       normal: [
         readFloat32(dataView, offset + 16),

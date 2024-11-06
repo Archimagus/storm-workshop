@@ -5,34 +5,41 @@ import {
   parsePartDefinitionFile,
 } from "../lib/parse_part_definition";
 
+let rootPath = "";
+type FileWithRelativePath = { file: File; relativePath: string };
 export function useFileDropHandler() {
   const { setParts, setMod, setMeshes } = useStormworkshop();
 
   async function handleFileList(items: FileList | DataTransferItemList) {
-    function handleFiles(files: File[]) {
+    function handleFiles(files: FileWithRelativePath[]) {
       setParts([]);
       setMeshes({});
       files.forEach(async (file) => {
-        console.log(file.name);
-        if (file.name === "mod.xml") {
-          const mod = await parseModFile(file);
+        if (!file?.file?.name) {
+          console.error("No file name", file);
+          return;
+        }
+        if (file.file.name === "mod.xml") {
+          const mod = await parseModFile(file.file);
           setMod(mod);
-        } else if (file.name.endsWith(".xml")) {
-          const part = await parsePartDefinitionFile(file);
+        } else if (file.file.name.endsWith(".xml")) {
+          const part = await parsePartDefinitionFile(file.file);
           setParts((prev) => [...prev, part]);
-        } else if (file.name.endsWith(".mesh")) {
-          const mesh = await parseMeshFile(file);
-          setMeshes((prev) => ({ ...prev, [file.name]: mesh }));
+        } else if (file.file.name.endsWith(".mesh")) {
+          const mesh = await parseMeshFile(file.file);
+          setMeshes((prev) => ({ ...prev, [file.relativePath]: mesh }));
         }
       });
     }
 
-    const filePromises: Promise<File>[] = [];
+    const filePromises: Promise<FileWithRelativePath>[] = [];
 
     // If items is a FileList from <input type="file">, process it directly
     if (items instanceof FileList) {
       for (let i = 0; i < items.length; i++) {
-        filePromises.push(Promise.resolve(items[i]));
+        filePromises.push(
+          Promise.resolve({ file: items[i], relativePath: items[i].name })
+        );
       }
     } else {
       // Otherwise, handle DataTransferItemList for drag-and-drop, using webkitGetAsEntry
@@ -40,6 +47,7 @@ export function useFileDropHandler() {
         const item = items[i];
         if ("webkitGetAsEntry" in item) {
           const entry = (item as DataTransferItem).webkitGetAsEntry();
+          rootPath = entry?.fullPath || "";
           if (entry) {
             if (entry.isDirectory) {
               filePromises.push(
@@ -48,7 +56,9 @@ export function useFileDropHandler() {
             } else if (entry.isFile) {
               filePromises.push(
                 new Promise((resolve) =>
-                  (entry as FileSystemFileEntry).file((file) => resolve(file))
+                  (entry as FileSystemFileEntry).file((file) =>
+                    resolve({ file, relativePath: file.name })
+                  )
                 )
               );
             }
@@ -65,9 +75,9 @@ export function useFileDropHandler() {
   // Updated traverseDirectory to return a promise that resolves with all files in the directory
   async function traverseDirectory(
     dirEntry: FileSystemDirectoryEntry
-  ): Promise<Promise<File>[]> {
+  ): Promise<Promise<FileWithRelativePath>[]> {
     const reader = dirEntry.createReader();
-    const filePromises: Promise<File>[] = [];
+    const filePromises: Promise<FileWithRelativePath>[] = [];
 
     function readEntries(): Promise<void> {
       return new Promise((resolve, reject) => {
@@ -86,8 +96,10 @@ export function useFileDropHandler() {
               );
             } else {
               return new Promise<void>((resolve) => {
+                const path = (entry as FileSystemFileEntry).fullPath;
+                const relativePath = path.replace(rootPath + "/", "");
                 (entry as FileSystemFileEntry).file((file) => {
-                  filePromises.push(Promise.resolve(file));
+                  filePromises.push(Promise.resolve({ file, relativePath }));
                   resolve();
                 });
               });

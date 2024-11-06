@@ -28,6 +28,11 @@ const subPartData = {
     icon: <Box className="h-4 w-4" />,
     description: "A voxel is a voxel.",
   },
+  [SubPartType.Mesh]: {
+    label: "Mesh",
+    icon: <Boxes className="h-4 w-4" />,
+    description: "A mesh is a mesh.",
+  },
 };
 
 export function ControlsMenu() {
@@ -54,24 +59,6 @@ export function ControlsMenu() {
             {subPartData[type].icon}
           </ToggleGroupItem>
         ))}
-      </ToggleGroup>
-
-      <ToggleGroup
-        type="single"
-        value={displayMode}
-        onValueChange={(value) => value && setDisplayMode(value)}
-        className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border rounded-md"
-      >
-        <ToggleGroupItem
-          value="wireframe"
-          aria-label="Wireframe mode"
-          className="px-3"
-        >
-          <Boxes className="h-4 w-4" />
-        </ToggleGroupItem>
-        <ToggleGroupItem value="solid" aria-label="Solid mode" className="px-3">
-          <Box className="h-4 w-4 fill-current" />
-        </ToggleGroupItem>
       </ToggleGroup>
     </div>
   );
