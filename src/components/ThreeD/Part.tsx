@@ -99,8 +99,8 @@ interface VoxelProps {
 const VoxelComponent: FC<VoxelProps> = ({ voxel }) => {
   const position = componentPositionToLocal(voxel.position);
   const [hovered, setHovered] = useState(false);
-  const { view, setHoveredObject } = useStormworkshop();
-  if (!view.includes(SubPartType.Voxel)) return null;
+  const { visibility, setHoveredObject } = useStormworkshop();
+  if (!visibility.includes(SubPartType.Voxel)) return null;
   return (
     <mesh
       onPointerOver={(e) => {
@@ -157,8 +157,8 @@ const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
   const position = componentPositionToLocal(surface.position);
   const rotation = componentOrientationToLocal(surface.orientation);
   const [hovered, setHovered] = useState(false);
-  const { setHoveredObject, view } = useStormworkshop();
-  if (!view.includes(SubPartType.Surface)) return null;
+  const { setHoveredObject, visibility } = useStormworkshop();
+  if (!visibility.includes(SubPartType.Surface)) return null;
   return (
     <object3D
       position={position}
@@ -205,8 +205,8 @@ const BuoyancySurfaceComponent: FC<BouancySurfaceProps> = ({ surface }) => {
   const position = componentPositionToLocal(surface.position);
   const rotation = componentOrientationToLocal(surface.orientation);
   const [hovered, setHovered] = useState(false);
-  const { setHoveredObject, view } = useStormworkshop();
-  if (!view.includes(SubPartType.BouancySurface)) return null;
+  const { setHoveredObject, visibility } = useStormworkshop();
+  if (!visibility.includes(SubPartType.BouancySurface)) return null;
   return (
     <object3D
       position={position}
@@ -283,8 +283,8 @@ const PhysicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
   const position = componentPositionToLocal(node.position);
   const rotation = componentOrientationToLocal(node.orientation);
   const [hovered, setHovered] = useState(false);
-  const { view, setHoveredObject } = useStormworkshop();
-  if (!view.includes(SubPartType.LogicNode)) return null;
+  const { visibility, setHoveredObject } = useStormworkshop();
+  if (!visibility.includes(SubPartType.LogicNode)) return null;
   const { color } = logicNodeTypeMap[node.type];
   return (
     <group
@@ -329,8 +329,8 @@ const PhysicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
 const LogicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
   const position = componentPositionToLocal(node.position);
   const [hovered, setHovered] = useState(false);
-  const { view, setHoveredObject } = useStormworkshop();
-  if (!view.includes(SubPartType.LogicNode)) return null;
+  const { visibility, setHoveredObject } = useStormworkshop();
+  if (!visibility.includes(SubPartType.LogicNode)) return null;
 
   const { color, offset } = logicNodeTypeMap[node.type];
 

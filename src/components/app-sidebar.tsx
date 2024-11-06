@@ -9,7 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { parsePartDefinition } from "@/lib/parse_part_definition";
+import { useFileDropHandler } from "@/hooks/use-file-drop-handler";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { ChevronDown } from "lucide-react";
 import { ComponentUI } from "./component-ui";
@@ -20,14 +20,14 @@ import {
 } from "./ui/collapsible";
 
 export function AppSidebar() {
-  const { parts, setParts } = useStormworkshop();
+  const stormworkshopContext = useStormworkshop();
+  const { parts } = stormworkshopContext;
+  const handleFiles = useFileDropHandler();
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          {/* <SidebarGroupLabel> */}
           <img src="Stormworkshop.webp" />
-          {/* </SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -40,24 +40,25 @@ export function AppSidebar() {
                   onDrop={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-
-                    const files = Array.from(e.dataTransfer.files);
-                    const xmlFile = files.find((file) =>
-                      file.name.endsWith(".xml")
-                    );
-
-                    if (xmlFile) {
-                      const reader = new FileReader();
-                      reader.onload = (e) => {
-                        const content = e.target?.result as string;
-                        // Handle XML content here
-                        const part = parsePartDefinition(content);
-                        setParts([...parts, part]);
-                      };
-                      reader.readAsText(xmlFile);
-                    }
+                    handleFiles(e.dataTransfer.items);
                   }}
+                  onClick={() =>
+                    document.getElementById("folderInput")?.click()
+                  }
                 >
+                  <input
+                    type="file"
+                    id="folderInput"
+                    // @ts-ignore
+                    webkitdirectory="true"
+                    multiple
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        handleFiles(e.target.files);
+                      }
+                    }}
+                  />
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <ShipWheel className="h-4 w-4" />
                     <span className="text-sm text-center whitespace-nowrap">

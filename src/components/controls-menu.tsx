@@ -31,31 +31,27 @@ const subPartData = {
 };
 
 export function ControlsMenu() {
-  const { view, setView } = useStormworkshop();
+  const { visibility, setVisibility } = useStormworkshop();
   const [displayMode, setDisplayMode] = useState("solid");
 
   return (
     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
       <ToggleGroup
         type="multiple"
-        value={view}
-        onValueChange={setView}
+        value={visibility}
+        onValueChange={setVisibility}
         className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border rounded-md"
       >
         {subPartTypes.map((type) => (
           <ToggleGroupItem
             value={type}
-            aria-label={`Toggle ${type}`}
+            aria-label={subPartData[type].label}
+            title={type}
             className="px-3"
+            key={type}
+            onChange={() => setVisibility((prev) => [...prev, type])}
           >
-            <ToggleGroupItem
-              value={type}
-              aria-label={subPartData[type].label}
-              title={type}
-              onChange={() => setView((prev) => [...prev, type])}
-            >
-              {subPartData[type].icon}
-            </ToggleGroupItem>
+            {subPartData[type].icon}
           </ToggleGroupItem>
         ))}
       </ToggleGroup>

@@ -1,3 +1,9 @@
+export interface Mod {
+  name: string;
+  author: string;
+  description: string;
+}
+
 export interface Position {
   x: number;
   y: number;
@@ -65,6 +71,10 @@ export interface Part {
   logicNodes: LogicNode[];
   voxels: Voxel[];
   connections: PartConnections;
+  mesh_data_name: string;
+  mesh_0_name: string;
+  mesh_1_name: string;
+  mesh_editor_only_name: string;
 }
 
 function parseSurfaces(surfacesElement: Element | null): Surface[] {
@@ -208,8 +218,7 @@ function parseRotationMatrix(
   return matrix;
 }
 
-export function parsePartDefinition(xmlString: string): Part {
-  // Clean up potentially problematic attributes in the XML string
+function getXmlDocument(xmlString: string) {
   const cleanXmlString = xmlString.replace(/(\s)(\d\d)=/g, "$1_$2=");
 
   // Create DOM parser
@@ -222,10 +231,34 @@ export function parsePartDefinition(xmlString: string): Part {
     console.error("XML parsing error:", parserError.textContent);
     throw new Error("Failed to parse XML");
   }
+  return xmlDoc;
+}
+
+export function parsePartDefinitionFile(file: File): Promise<Part> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    try {
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        const part = parsePartDefinition(content);
+        resolve(part);
+      };
+      reader.readAsText(file);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export function parsePartDefinition(xmlString: string): Part {
+  // Clean up potentially problematic attributes in the XML string
+  const xmlDoc = getXmlDocument(xmlString);
 
   // Get the root definition element
   const definition = xmlDoc.querySelector("definition");
-  if (!definition) throw new Error("No definition element found in XML");
+  if (!definition) {
+    throw new Error("No definition element found in XML");
+  }
 
   // Parse main attributes
   const result: Part = {
@@ -234,6 +267,11 @@ export function parsePartDefinition(xmlString: string): Part {
     type: parseInt(definition.getAttribute("type") || "0"),
     mass: parseFloat(definition.getAttribute("mass") || "0"),
     value: parseInt(definition.getAttribute("value") || "0"),
+    mesh_data_name: definition.getAttribute("mesh_data_name") || "",
+    mesh_0_name: definition.getAttribute("mesh_0_name") || "",
+    mesh_1_name: definition.getAttribute("mesh_1_name") || "",
+    mesh_editor_only_name:
+      definition.getAttribute("mesh_editor_only_name") || "",
 
     // Parse nested elements
     surfaces: parseSurfaces(definition.querySelector("surfaces")),
@@ -253,4 +291,31 @@ export function parsePartDefinition(xmlString: string): Part {
   };
 
   return result;
+}
+export function parseModFile(file: File): Promise<Mod> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    try {
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        const mod = parseModXml(content);
+        resolve(mod);
+      };
+      reader.readAsText(file);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+export function parseModXml(xmlString: string): Mod {
+  const xmlDoc = getXmlDocument(xmlString);
+
+  const mod = xmlDoc.querySelector("mod");
+  if (!mod) throw new Error("No mod element found in XML");
+
+  return {
+    name: mod.getAttribute("name") || "",
+    author: mod.getAttribute("author") || "",
+    description: mod.getAttribute("desc") || "",
+  };
 }
