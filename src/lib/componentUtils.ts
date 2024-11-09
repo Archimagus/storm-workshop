@@ -7,7 +7,7 @@ export const componentPositionToLocal = (
   position: Position | null
 ): [number, number, number] => {
   if (!position) return defaultPosition;
-  return [position.x * 0.25, position.y * 0.25, position.z * 0.25];
+  return [position.x * -0.25, position.y * 0.25, position.z * 0.25];
 };
 /**
  * Converts the orientation of a component to the local coordinate system.
@@ -25,9 +25,9 @@ export const componentOrientationToLocal = (
 ): EulerTuple => {
   switch (orientation) {
     case 0:
-      return [0, Math.PI / 2, 0];
-    case 1:
       return [0, -Math.PI / 2, 0];
+    case 1:
+      return [0, Math.PI / 2, 0];
     case 2:
       return [-Math.PI / 2, 0, 0];
     case 3:

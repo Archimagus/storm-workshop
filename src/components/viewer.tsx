@@ -1,9 +1,8 @@
 import { useStormworkshop } from "@/StormworkshopProvider";
-import { Bounds, Grid, OrbitControls } from "@react-three/drei";
+import { Bounds, Environment, Grid, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import React from "react";
 
-import { Background } from "./background";
 import { PartComponent } from "./ThreeD/Part";
 
 export const Viewer: React.FC = () => {
@@ -17,8 +16,12 @@ export const Viewer: React.FC = () => {
       camera={{ position: [3, 3, 3], fov: 40 }}
     >
       <color attach="background" args={["skyblue"]} />
-      <Background />
-
+      <Environment
+        background
+        near={0.1}
+        far={1000}
+        files={["sky.webp", "sky-gainmap.webp", "sky.json"]}
+      />
       <Bounds fit clip observe margin={5}>
         {parts.map((part) => (
           <PartComponent key={part.name} part={part} />

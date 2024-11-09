@@ -1,13 +1,15 @@
 import { LogicNode, Surface, Voxel } from "./parse_part_definition";
 
 export enum SubPartType {
-  Surface = "Surface",
+  VisibleSurface = "VisibleSurface",
+  HiddenSurface = "HiddenSurface",
   BouancySurface = "BouancySurface",
+  Mesh = "Mesh",
+  EditorOnlyMesh = "EditorOnlyMesh",
+  PipeConnection = "PipeConnection",
   LogicNode = "LogicNode",
   Voxel = "Voxel",
   ReserveVoxel = "ReserveVoxel",
-  Mesh = "Mesh",
-  EditorOnlyMesh = "EditorOnlyMesh",
 }
 
 export type HoveredObject = {

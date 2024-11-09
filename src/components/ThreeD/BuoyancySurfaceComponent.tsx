@@ -7,7 +7,7 @@ import { Surface } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { Edges } from "@react-three/drei";
-import { FC, useMemo, useState } from "react";
+import { FC, useState } from "react";
 
 interface BuoyancySurfaceProps {
   surface: Surface;
@@ -19,10 +19,6 @@ export const BuoyancySurfaceComponent: FC<BuoyancySurfaceProps> = ({
   const rotation = componentOrientationToLocal(surface.orientation);
   const [hovered, setHovered] = useState(false);
   const { setHoveredObject, visibility } = useStormworkshop();
-
-  const geometry = useMemo(() => {
-    return getSurfaceGeometry(surface);
-  }, [surface.shape]);
 
   if (!visibility.includes(SubPartType.BouancySurface)) return null;
   return (
@@ -45,7 +41,7 @@ export const BuoyancySurfaceComponent: FC<BuoyancySurfaceProps> = ({
     >
       {/* The plane is offset by 0.127 to prevent z-fighting with the voxel and the surface */}
       <mesh position={[0, 0, 0.127]}>
-        {geometry}
+        {getSurfaceGeometry(surface)}
         <meshStandardMaterial
           color="#e8df75"
           side={2}

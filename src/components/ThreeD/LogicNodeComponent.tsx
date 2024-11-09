@@ -2,8 +2,8 @@ import { LogicNode } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { Billboard, Edges } from "@react-three/drei";
-import { FC, useState } from "react";
-import { AlwaysDepth } from "three";
+import { FC, useMemo, useState } from "react";
+import { AlwaysDepth, CircleGeometry } from "three";
 import {
   componentOrientationToLocal,
   componentPositionToLocal,
@@ -47,8 +47,16 @@ const PhysicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
   const rotation = componentOrientationToLocal(node.orientation);
   const [hovered, setHovered] = useState(false);
   const { visibility, setHoveredObject } = useStormworkshop();
-  if (!visibility.includes(SubPartType.LogicNode)) return null;
   const { color } = logicNodeTypeMap[node.type];
+
+  const geometry = useMemo(() => {
+    const geometry = new CircleGeometry(0.0675, 8);
+    geometry.rotateZ(Math.PI / 8);
+    geometry.translate(0, 0, -0.003);
+    return geometry;
+  }, []);
+
+  if (!visibility.includes(SubPartType.PipeConnection)) return null;
   return (
     <group
       position={position}
@@ -67,18 +75,17 @@ const PhysicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
         setHoveredObject(null);
       }}
     >
-      <mesh renderOrder={1} position={[0, 0, 0.128]}>
-        <circleGeometry args={[0.07, 32]} />
+      <mesh renderOrder={1} position={[0, 0, 0.128]} geometry={geometry}>
         <meshStandardMaterial
           color={color}
           emissive={color}
           emissiveIntensity={hovered ? 0.5 : 0}
         />
         <Edges
-          linewidth={hovered ? 4 : 2}
+          linewidth={hovered ? 6 : 4}
           scale={1}
           threshold={80}
-          color={"white"}
+          color={"#212121"}
           renderOrder={2}
         />
       </mesh>
@@ -121,10 +128,10 @@ const LogicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
         ) : (
           <circleGeometry args={[0.025, 32]} />
         )}
-        <meshStandardMaterial
+        <meshToonMaterial
           color={color}
           emissive={color}
-          emissiveIntensity={hovered ? 0.5 : 0}
+          emissiveIntensity={hovered ? 1 : 0.5}
           depthFunc={AlwaysDepth}
           depthWrite={false}
           transparent={true}

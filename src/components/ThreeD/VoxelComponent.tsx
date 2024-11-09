@@ -53,7 +53,7 @@ export const VoxelComponent: FC<VoxelProps> = ({ voxel }) => {
       <meshStandardMaterial
         color={voxel.flags === 1 ? "gray" : "#ff7c7c"}
         transparent
-        opacity={voxel.flags === 1 ? 1 : 0.25}
+        opacity={voxel.flags === 1 ? 0.5 : 0.25}
       />
       <Edges
         linewidth={hovered ? 3 : 1}

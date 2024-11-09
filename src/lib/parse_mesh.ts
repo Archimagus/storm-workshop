@@ -63,6 +63,11 @@ export function parseMeshFile(file: File): Promise<BufferGeometry> {
             4
           )
         );
+        mesh.subMeshes.meshes.forEach((subMesh) => {
+          const start = subMesh.startIndex;
+          const end = subMesh.endIndex;
+          geometry.addGroup(start, end - start, subMesh.shaderId);
+        });
         resolve(geometry);
       };
       reader.readAsArrayBuffer(file);

@@ -13,11 +13,11 @@ function App() {
       <StormworkshopProvider>
         <SidebarProvider>
           <AppSidebar />
-          <main className="h-full w-full">
+          <main className="h-full w-full relative">
             <ControlsMenu />
             <Viewer />
-            <SidebarTrigger />
             <HoverInfo />
+            <SidebarTrigger />
             {/* <RawXmlOverlay /> */}
           </main>
         </SidebarProvider>

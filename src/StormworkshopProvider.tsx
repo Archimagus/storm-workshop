@@ -1,4 +1,7 @@
-import testInput from "@/assets/door_frame_straight.xml?raw";
+// import testInput from "@/assets/01_block.xml?raw";
+// import testInput from "@/assets/02_wedge.xml?raw";
+import testInput from "@/assets/03_pyramid.xml?raw";
+// import testInput from "@/assets/04_invpyramid.xml?raw";
 import React, { ComponentProps, FC } from "react";
 import { BufferGeometry } from "three";
 import { Mod, Part, parsePartDefinition } from "./lib/parse_part_definition";
@@ -48,9 +51,12 @@ export const StormworkshopProvider: FC<ComponentProps<"div">> = ({
     {}
   );
   const [hoveredObject, setHoveredObject] = React.useState<any>(null);
-  const [visibility, setVisibility] = React.useState<string[]>(
-    Object.keys(SubPartType)
-  );
+  const [visibility, setVisibility] = React.useState<string[]>([
+    SubPartType.VisibleSurface,
+    SubPartType.Mesh,
+    SubPartType.PipeConnection,
+    SubPartType.EditorOnlyMesh,
+  ]);
 
   const contextValue = React.useMemo<StormworkshopContext>(
     () => ({

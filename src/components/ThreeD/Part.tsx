@@ -121,7 +121,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
           }}
         >
           <meshStandardMaterial
-            color="white"
+            emissiveIntensity={0.5}
             side={BackSide}
             vertexColors={true}
           />
