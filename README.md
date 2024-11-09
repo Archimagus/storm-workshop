@@ -1,30 +1,29 @@
-# React + TypeScript + Vite
+# Stormworkshop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based mod editor for Stormworks: Build and Rescue. This tool allows you to view and edit part definitions and their associated meshes.
 
-Currently, two official plugins are available:
+![Stormworkshop Screenshot](./Screenshot.webp)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- 3D visualization of part definitions including:
+  - Voxels
+  - Surfaces
+  - Buoyancy surfaces
+  - Logic nodes
+  - Meshes
+- Interactive component inspection
+- Support for viewing multiple parts simultaneously
+- Drag-and-drop mod folder support
+- Real-time component visibility toggling
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Getting Started
 
-- Configure the top-level `parserOptions` property like this:
+You can drag and drop your Stormworks mod folder into the application to load parts and their meshes.
+Dragging in a part definition xml file will load just that part.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Prerequisites
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Node.js (v18 or higher recommended)
+- A modern web browser
+- Stormworks: Build and Rescue mod files
