@@ -36,4 +36,5 @@ export default defineConfig({
     hasErrorLogged: () => false,
     hasWarned: false,
   },
+  base: "/stormworkshop/", // Just the repository name with slashes
 });
