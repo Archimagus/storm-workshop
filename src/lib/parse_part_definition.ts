@@ -75,6 +75,9 @@ export interface Part {
   mesh_0_name: string;
   mesh_1_name: string;
   mesh_editor_only_name: string;
+  constraint_pos_parent: Position | null;
+  door_base_pos: Position | null;
+  magnet_offset: Position | null;
 }
 
 function parseSurfaces(surfacesElement: Element | null): Surface[] {
@@ -272,7 +275,11 @@ export function parsePartDefinition(xmlString: string): Part {
     mesh_1_name: definition.getAttribute("mesh_1_name") || "",
     mesh_editor_only_name:
       definition.getAttribute("mesh_editor_only_name") || "",
-
+    constraint_pos_parent: parsePosition(
+      definition.querySelector("constraint_pos_parent")
+    ),
+    door_base_pos: parsePosition(definition.querySelector("door_base_pos")),
+    magnet_offset: parsePosition(definition.querySelector("magnet_offset")),
     // Parse nested elements
     surfaces: parseSurfaces(definition.querySelector("surfaces")),
     buoyancySurfaces: parseBouancySurfaces(

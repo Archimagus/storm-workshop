@@ -2,7 +2,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { Box, Boxes, CircleDot, Grid2X2, Ship } from "lucide-react";
-import { useState } from "react";
 
 const subPartTypes = Object.values(SubPartType);
 
@@ -28,16 +27,25 @@ const subPartData = {
     icon: <Box className="h-4 w-4" />,
     description: "A voxel is a voxel.",
   },
+  [SubPartType.ReserveVoxel]: {
+    label: "Reserve Voxel",
+    icon: <Box className="h-4 w-4 text-red-400" />,
+    description: "A reserve voxel is a voxel that is used to calculate voxels.",
+  },
   [SubPartType.Mesh]: {
     label: "Mesh",
     icon: <Boxes className="h-4 w-4" />,
     description: "A mesh is a mesh.",
   },
+  [SubPartType.EditorOnlyMesh]: {
+    label: "Editor Only Mesh",
+    icon: <Boxes className="h-4 w-4 text-blue-400" />,
+    description: "A mesh that is only visible in the editor.",
+  },
 };
 
 export function ControlsMenu() {
   const { visibility, setVisibility } = useStormworkshop();
-  const [displayMode, setDisplayMode] = useState("solid");
 
   return (
     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">

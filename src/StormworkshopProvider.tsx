@@ -1,4 +1,4 @@
-import testInput from "@/assets/connector_large.xml?raw";
+import testInput from "@/assets/door_frame_straight.xml?raw";
 import React, { ComponentProps, FC } from "react";
 import { BufferGeometry } from "three";
 import { Mod, Part, parsePartDefinition } from "./lib/parse_part_definition";
