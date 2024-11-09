@@ -1,5 +1,3 @@
-import { ShipWheel } from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useFileDropHandler } from "@/hooks/use-file-drop-handler";
 import { useStormworkshop } from "@/StormworkshopProvider";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ShipWheel } from "lucide-react";
 import { ComponentUI } from "./component-ui";
 import {
   Collapsible,
