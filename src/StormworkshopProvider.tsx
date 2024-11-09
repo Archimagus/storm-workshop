@@ -2,7 +2,7 @@
 // import testInput from "@/assets/02_wedge.xml?raw";
 import testInput from "@/assets/03_pyramid.xml?raw";
 // import testInput from "@/assets/04_invpyramid.xml?raw";
-import React, { ComponentProps, FC } from "react";
+import React, { ComponentProps, FC, useEffect } from "react";
 import { BufferGeometry } from "three";
 import { Mod, Part, parsePartDefinition } from "./lib/parse_part_definition";
 import { HoveredObject, SubPartType } from "./lib/types";
@@ -12,6 +12,8 @@ type StormworkshopContext = {
   setMod: React.Dispatch<React.SetStateAction<Mod | null>>;
   parts: Part[];
   setParts: React.Dispatch<React.SetStateAction<Part[]>>;
+  openParts: number[];
+  setOpenParts: React.Dispatch<React.SetStateAction<number[]>>;
   hoveredObject: HoveredObject | null;
   setHoveredObject: React.Dispatch<React.SetStateAction<HoveredObject | null>>;
   rawData: string;
@@ -47,6 +49,12 @@ export const StormworkshopProvider: FC<ComponentProps<"div">> = ({
   const [parts, setParts] = React.useState<Part[]>([
     parsePartDefinition(rawData),
   ]);
+  const [openParts, setOpenParts] = React.useState<number[]>([]);
+
+  useEffect(() => {
+    setOpenParts([0]);
+  }, [parts]);
+
   const [meshes, setMeshes] = React.useState<Record<string, BufferGeometry>>(
     {}
   );
@@ -64,6 +72,8 @@ export const StormworkshopProvider: FC<ComponentProps<"div">> = ({
       setMod,
       parts,
       setParts,
+      openParts,
+      setOpenParts,
       hoveredObject,
       setHoveredObject,
       rawData,
@@ -73,7 +83,7 @@ export const StormworkshopProvider: FC<ComponentProps<"div">> = ({
       meshes,
       setMeshes,
     }),
-    [parts, hoveredObject, visibility, meshes]
+    [parts, hoveredObject, visibility, meshes, openParts]
   );
 
   return (

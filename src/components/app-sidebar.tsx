@@ -20,9 +20,10 @@ import {
 } from "./ui/collapsible";
 
 export function AppSidebar() {
-  const stormworkshopContext = useStormworkshop();
-  const { parts } = stormworkshopContext;
+  const { parts, openParts, setOpenParts } = useStormworkshop();
+
   const handleFiles = useFileDropHandler();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -67,9 +68,16 @@ export function AppSidebar() {
                   </div>
                 </div>
               </SidebarMenuItem>
-              {parts.map((part) => (
+              {parts.map((part, index) => (
                 <Collapsible
-                  defaultOpen
+                  defaultOpen={openParts.includes(index)}
+                  onOpenChange={(open) => {
+                    if (open) {
+                      setOpenParts([...openParts, index]);
+                    } else {
+                      setOpenParts(openParts.filter((i) => i !== index));
+                    }
+                  }}
                   className="group/collapsible"
                   key={part.name}
                 >

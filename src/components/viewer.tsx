@@ -6,7 +6,7 @@ import React from "react";
 import { PartComponent } from "./ThreeD/Part";
 
 export const Viewer: React.FC = () => {
-  const { parts } = useStormworkshop();
+  const { parts, openParts } = useStormworkshop();
 
   return (
     <Canvas
@@ -23,9 +23,12 @@ export const Viewer: React.FC = () => {
         files={["sky.webp", "sky-gainmap.webp", "sky.json"]}
       />
       <Bounds fit clip observe margin={5}>
-        {parts.map((part) => (
-          <PartComponent key={part.name} part={part} />
-        ))}
+        {parts.map(
+          (part, index) =>
+            openParts.includes(index) && (
+              <PartComponent key={part.name} part={part} />
+            )
+        )}
       </Bounds>
       <axesHelper args={[2]} position={[0, 0, 0]} />
       <Grid
