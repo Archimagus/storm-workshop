@@ -1,3 +1,4 @@
+import packageInfo from "@/../package.json";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import "./App.css";
@@ -18,6 +19,9 @@ function App() {
             <Viewer />
             <HoverInfo />
             <SidebarTrigger />
+            <div className="absolute bottom-0 right-0 p-2 text-xs text-gray-700">
+              Version:{packageInfo.version}
+            </div>
             {/* <RawXmlOverlay /> */}
           </main>
         </SidebarProvider>
