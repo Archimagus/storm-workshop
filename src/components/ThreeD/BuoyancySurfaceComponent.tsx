@@ -39,8 +39,8 @@ export const BuoyancySurfaceComponent: FC<BuoyancySurfaceProps> = ({
         setHoveredObject(null);
       }}
     >
-      {/* The plane is offset by 0.127 to prevent z-fighting with the voxel and the surface */}
-      <mesh position={[0, 0, 0.127]}>
+      {/* The plane is offset by 0.126 to prevent z-fighting with the voxel and the surface */}
+      <mesh position={[0, 0, 0.126]}>
         {getSurfaceGeometry(surface)}
         <meshStandardMaterial
           color="#e8df75"
@@ -50,7 +50,6 @@ export const BuoyancySurfaceComponent: FC<BuoyancySurfaceProps> = ({
         />
         <Edges
           linewidth={hovered ? 3 : 1}
-          scale={1}
           threshold={80} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
           color={hovered ? "#e8df75" : "#97914d"}
           renderOrder={3}

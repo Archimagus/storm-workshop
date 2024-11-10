@@ -2,7 +2,7 @@ import { Part } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { FC, useMemo } from "react";
-import { BackSide } from "three";
+import { BackSide, Vector3Tuple } from "three";
 import { BuoyancySurfaceComponent } from "./BuoyancySurfaceComponent";
 import { LogicNodeComponent } from "./LogicNodeComponent";
 import { SurfaceComponent } from "./SurfaceComponent";
@@ -50,6 +50,12 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
   const mesh1 = meshes[part.mesh_1_name];
   const mesh_editor_only = meshes[part.mesh_editor_only_name];
 
+  const meshPositionOffset: Vector3Tuple = [
+    part.constraint_pos_parent?.x || 0,
+    part.constraint_pos_parent?.y || 0,
+    part.constraint_pos_parent?.z || 0,
+  ];
+
   return (
     <group>
       {voxels}
@@ -58,6 +64,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
       {logicNodes}
       {mesh && visibility.includes(SubPartType.Mesh) && (
         <mesh
+          //   position={meshPositionOffset}
           geometry={mesh}
           onPointerOver={(e) => {
             e.stopPropagation();
@@ -80,11 +87,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
       )}
       {mesh0 && visibility.includes(SubPartType.Mesh) && (
         <mesh
-          position={[
-            part.constraint_pos_parent?.x || 0,
-            part.constraint_pos_parent?.y || 0,
-            part.constraint_pos_parent?.z || 0,
-          ]}
+          //   position={meshPositionOffset}
           geometry={mesh0}
           onPointerOver={(e) => {
             e.stopPropagation();
@@ -107,6 +110,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
       )}
       {mesh1 && visibility.includes(SubPartType.Mesh) && (
         <mesh
+          //   position={meshPositionOffset}
           geometry={mesh1}
           onPointerOver={(e) => {
             e.stopPropagation();

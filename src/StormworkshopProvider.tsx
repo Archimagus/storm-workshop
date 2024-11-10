@@ -62,7 +62,6 @@ export const StormworkshopProvider: FC<ComponentProps<"div">> = ({
   const [visibility, setVisibility] = React.useState<string[]>([
     SubPartType.VisibleSurface,
     SubPartType.Mesh,
-    SubPartType.PipeConnection,
     SubPartType.EditorOnlyMesh,
   ]);
 
