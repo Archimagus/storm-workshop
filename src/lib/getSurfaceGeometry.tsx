@@ -34,19 +34,23 @@ export function getSurfaceGeometry(surface: Surface) {
   switch (surface.shape) {
     case 0:
     case 1:
-      // Pretty sure these are correct
       return <Shapes.SquareShape color={getSurfaceColor(surface.transType)} />;
     case 2:
-      // Probably not correct
       return (
         <Shapes.TriangleShape rotation={surfaceRotationToLocal(surface)} />
       );
     case 3:
       return (
-        <Shapes.TransmissionShape color={getSurfaceColor(surface.transType)} />
+        <Shapes.TransmissionShape
+          rotation={surfaceRotationToLocal(surface)}
+          color={getSurfaceColor(surface.transType)}
+        />
       );
+    case 4:
+      return <Shapes.StaticShape rotation={surfaceRotationToLocal(surface)} />;
+    case 5:
+      return <Shapes.WeightShape rotation={surfaceRotationToLocal(surface)} />;
     case 6:
-      // Maybe correct
       return <Shapes.SlopeShape rotation={surfaceRotationToLocal(surface)} />;
     case 7:
       return <Shapes.PyramidShape rotation={surfaceRotationToLocal(surface)} />;

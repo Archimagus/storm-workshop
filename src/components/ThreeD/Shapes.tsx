@@ -177,10 +177,12 @@ export function TransmissionShape({
   radius = 0.0675,
   centerRatio = 0.8,
   color = "white",
+  rotation = 0,
 }: {
   radius?: number;
   centerRatio?: number;
   color?: ColorRepresentation;
+  rotation?: number;
 }) {
   const geometry = useMemo(() => {
     const innerShape = new Shape().setFromPoints(
@@ -217,7 +219,84 @@ export function TransmissionShape({
 
     setVertexColors(geometry2, "#2d2d2d");
 
-    return BufferGeometryUtils.mergeGeometries([geometry1, geometry2]);
-  }, []);
+    const geometry = BufferGeometryUtils.mergeGeometries([
+      geometry1,
+      geometry2,
+    ]);
+    geometry.rotateZ(rotation);
+    return geometry;
+  }, [rotation]);
+  return <primitive object={geometry} />;
+}
+
+export function StaticShape({
+  rotation = 0,
+  color = "white",
+}: {
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const shape = new Shape();
+    shape.moveTo(-0.125, -0.125);
+    shape.lineTo(0.125, -0.125);
+    shape.lineTo(0.125, 0.125);
+    shape.lineTo(-0.125, 0.125);
+    shape.closePath();
+    shape.holes.push(
+      new Path()
+        .moveTo(-0.0625 / 2, -0.0625 / 2)
+        .lineTo(0.0625 / 2, -0.0625 / 2)
+        .lineTo(0.0625 / 2, 0.0625 / 2)
+        .lineTo(-0.0625 / 2, 0.0625 / 2)
+        .closePath()
+    );
+    const geometry = new ShapeGeometry(shape);
+    setVertexColors(geometry, color);
+    const geometry2 = new PlaneGeometry(0.0625, 0.0625);
+    setVertexColors(geometry2, "gray");
+    const geometry3 = BufferGeometryUtils.mergeGeometries([
+      geometry,
+      geometry2,
+    ]);
+    return geometry3;
+  }, [rotation]);
+  return <primitive object={geometry} />;
+}
+
+export function WeightShape({
+  rotation = 0,
+  color = "white",
+}: {
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const shape = new Shape();
+    shape.moveTo(-0.125, -0.125);
+    shape.lineTo(0.125, -0.125);
+    shape.lineTo(0.125, 0.125);
+    shape.lineTo(-0.125, 0.125);
+    shape.closePath();
+    shape.holes.push(
+      new Path()
+        .moveTo(0, -0.0625 / 2)
+        .lineTo(0.0625 / 2, 0)
+        .lineTo(0, 0.0625 / 2)
+        .lineTo(-0.0625 / 2, 0)
+        .closePath()
+    );
+    const geometry = new ShapeGeometry(shape);
+    setVertexColors(geometry, color);
+    const geometry2 = new PlaneGeometry(0.0625 / 2, 0.0625 / 2);
+    geometry2.scale(Math.sqrt(2), Math.sqrt(2), 1);
+    geometry2.rotateZ(Math.PI / 4);
+    setVertexColors(geometry2, "gray");
+    const geometry3 = BufferGeometryUtils.mergeGeometries([
+      geometry,
+      geometry2,
+    ]);
+    return geometry3;
+  }, [rotation]);
   return <primitive object={geometry} />;
 }
