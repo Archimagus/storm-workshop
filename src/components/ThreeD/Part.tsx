@@ -56,6 +56,8 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
     part.constraint_pos_parent?.z || 0,
   ];
 
+  const meshColor = "gray";
+
   return (
     <group>
       {voxels}
@@ -78,7 +80,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshStandardMaterial color="white" vertexColors={true} />
+          <meshStandardMaterial color={meshColor} vertexColors={true} />
         </mesh>
       )}
       {mesh0 && visibility.includes(SubPartType.Mesh) && (
@@ -97,7 +99,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshLambertMaterial color="white" vertexColors={true} />
+          <meshStandardMaterial color={meshColor} vertexColors={true} />
         </mesh>
       )}
       {mesh1 && visibility.includes(SubPartType.Mesh) && (
@@ -116,7 +118,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshStandardMaterial emissiveIntensity={0.5} vertexColors={true} />
+          <meshStandardMaterial color={meshColor} vertexColors={true} />
         </mesh>
       )}
       {mesh_editor_only && visibility.includes(SubPartType.EditorOnlyMesh) && (
@@ -134,7 +136,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshStandardMaterial color="white" vertexColors={true} />
+          <meshStandardMaterial color={meshColor} vertexColors={true} />
         </mesh>
       )}
     </group>

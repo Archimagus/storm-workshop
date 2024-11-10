@@ -3,6 +3,7 @@ import { Bounds, Environment, Grid, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import React from "react";
 
+import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import { PartComponent } from "./ThreeD/Part";
 
 export const Viewer: React.FC = () => {
@@ -11,7 +12,11 @@ export const Viewer: React.FC = () => {
   return (
     <Canvas
       shadows
-      gl={{ antialias: true }}
+      gl={{
+        antialias: true,
+        toneMapping: ACESFilmicToneMapping,
+        outputColorSpace: SRGBColorSpace,
+      }}
       dpr={[1, 2]}
       camera={{ position: [3, 3, 3], fov: 40 }}
     >

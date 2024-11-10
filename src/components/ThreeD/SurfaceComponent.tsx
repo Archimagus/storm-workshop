@@ -4,7 +4,6 @@ import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { Edges } from "@react-three/drei";
 import { FC, useState } from "react";
-import { DoubleSide } from "three";
 import {
   componentOrientationToLocal,
   componentPositionToLocal,
@@ -49,19 +48,10 @@ export const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
       <mesh position={[0, 0, 0.125]}>
         {getSurfaceGeometry(surface)}
         {!isHiddenSurface && (
-          <meshStandardMaterial
-            color={"white"}
-            vertexColors
-            side={DoubleSide}
-          />
+          <meshStandardMaterial color={"white"} vertexColors />
         )}
         {isHiddenSurface && (
-          <meshStandardMaterial
-            color="#fd8888"
-            side={DoubleSide}
-            transparent
-            opacity={0.25}
-          />
+          <meshStandardMaterial color="#fd8888" transparent opacity={0.25} />
         )}
         <Edges
           linewidth={hovered ? 3 : 1}
