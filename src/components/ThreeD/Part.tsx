@@ -2,7 +2,7 @@ import { Part } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
 import { useStormworkshop } from "@/StormworkshopProvider";
 import { FC, useMemo } from "react";
-import { BackSide, Vector3Tuple } from "three";
+import { Vector3Tuple } from "three";
 import { BuoyancySurfaceComponent } from "./BuoyancySurfaceComponent";
 import { LogicNodeComponent } from "./LogicNodeComponent";
 import { SurfaceComponent } from "./SurfaceComponent";
@@ -78,11 +78,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshStandardMaterial
-            color="white"
-            side={BackSide}
-            vertexColors={true}
-          />
+          <meshStandardMaterial color="white" vertexColors={true} />
         </mesh>
       )}
       {mesh0 && visibility.includes(SubPartType.Mesh) && (
@@ -101,11 +97,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshStandardMaterial
-            color="white"
-            side={BackSide}
-            vertexColors={true}
-          />
+          <meshLambertMaterial color="white" vertexColors={true} />
         </mesh>
       )}
       {mesh1 && visibility.includes(SubPartType.Mesh) && (
@@ -124,11 +116,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshStandardMaterial
-            emissiveIntensity={0.5}
-            side={BackSide}
-            vertexColors={true}
-          />
+          <meshStandardMaterial emissiveIntensity={0.5} vertexColors={true} />
         </mesh>
       )}
       {mesh_editor_only && visibility.includes(SubPartType.EditorOnlyMesh) && (
@@ -146,11 +134,7 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
             setHoveredObject(null);
           }}
         >
-          <meshStandardMaterial
-            color="white"
-            side={BackSide}
-            vertexColors={true}
-          />
+          <meshStandardMaterial color="white" vertexColors={true} />
         </mesh>
       )}
     </group>

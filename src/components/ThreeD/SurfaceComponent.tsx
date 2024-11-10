@@ -65,7 +65,6 @@ export const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
         )}
         <Edges
           linewidth={hovered ? 3 : 1}
-          scale={[-1, -1, -1]}
           threshold={80} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
           color={hovered ? "#000206" : "#2c2c2c"}
           renderOrder={3}
