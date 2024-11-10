@@ -59,7 +59,7 @@ const subPartData = {
     label: "Pipe Connection",
     icon: <CircleDot className="h-4 w-4" />,
     description: "A pipe connection is a pipe connection.",
-    defaultEnabled: true,
+    defaultEnabled: false,
   },
 };
 

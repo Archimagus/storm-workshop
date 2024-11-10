@@ -13,7 +13,8 @@ import {
 export interface SurfaceProps {
   surface: Surface;
 }
-const hiddenSurfaceShapes = [0, 3];
+
+const hiddenSurfaceShapes = [0];
 export const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
   const position = componentPositionToLocal(surface.position);
   const rotation = componentOrientationToLocal(surface.orientation);
@@ -45,11 +46,14 @@ export const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
         setHoveredObject(null);
       }}
     >
-      {/* The plane is offset by 0.126 to prevent z-fighting with the voxel */}
-      <mesh position={[0, 0, 0.126]}>
+      <mesh position={[0, 0, 0.125]}>
         {getSurfaceGeometry(surface)}
         {!isHiddenSurface && (
-          <meshStandardMaterial color="#ffffff" side={DoubleSide} />
+          <meshStandardMaterial
+            color={"white"}
+            vertexColors
+            side={DoubleSide}
+          />
         )}
         {isHiddenSurface && (
           <meshStandardMaterial
@@ -61,7 +65,6 @@ export const SurfaceComponent: FC<SurfaceProps> = ({ surface }) => {
         )}
         <Edges
           linewidth={hovered ? 3 : 1}
-          scale={1}
           threshold={80} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
           color={hovered ? "#000206" : "#2c2c2c"}
           renderOrder={3}

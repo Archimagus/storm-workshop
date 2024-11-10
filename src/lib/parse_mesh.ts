@@ -112,7 +112,7 @@ export function parseMesh(bin: Uint8Array): MeshData {
   for (let i = 0; i < vertexCount; i++) {
     const vertex: Vertex = {
       position: [
-        readFloat32(dataView, offset),
+        -readFloat32(dataView, offset),
         readFloat32(dataView, offset + 4),
         readFloat32(dataView, offset + 8),
       ],
@@ -123,7 +123,7 @@ export function parseMesh(bin: Uint8Array): MeshData {
         bin[offset + 15] / 255,
       ],
       normal: [
-        readFloat32(dataView, offset + 16),
+        -readFloat32(dataView, offset + 16),
         readFloat32(dataView, offset + 20),
         readFloat32(dataView, offset + 24),
       ],

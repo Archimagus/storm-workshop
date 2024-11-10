@@ -30,7 +30,7 @@ export const Viewer: React.FC = () => {
             )
         )}
       </Bounds>
-      <axesHelper args={[2]} position={[0, 0, 0]} />
+      <axesHelper args={[2]} position={[0, 0, 0]} scale={[-1, 1, 1]} />
       <Grid
         infiniteGrid
         cellSize={0.25}

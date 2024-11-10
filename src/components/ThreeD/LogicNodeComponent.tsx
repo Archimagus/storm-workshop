@@ -75,7 +75,7 @@ const PhysicalLogicNodeComponent: FC<LogicNodeProps> = ({ node }) => {
         setHoveredObject(null);
       }}
     >
-      <mesh renderOrder={1} position={[0, 0, 0.128]} geometry={geometry}>
+      <mesh renderOrder={1} position={[0, 0, 0.129]} geometry={geometry}>
         <meshStandardMaterial
           color={color}
           emissive={color}

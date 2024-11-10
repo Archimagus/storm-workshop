@@ -1,21 +1,50 @@
 import { useMemo } from "react";
 import {
+  BufferAttribute,
   BufferGeometry,
+  Color,
+  ColorRepresentation,
+  ExtrudeGeometry,
   Path,
   PlaneGeometry,
   Shape,
   ShapeGeometry,
   Vector3,
 } from "three";
+import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
+
+function setVertexColors(geometry: BufferGeometry, color: ColorRepresentation) {
+  const count = geometry.attributes.position.count;
+  const colors = Array(count).fill(new Color(color).toArray()).flat();
+  geometry.setAttribute(
+    "color",
+    new BufferAttribute(new Float32Array(colors), 3)
+  );
+}
+
+export function SquareShape({
+  color = "white",
+}: {
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const geometry = new PlaneGeometry(0.25, 0.25);
+    setVertexColors(geometry, color);
+    return geometry;
+  }, []);
+  return <primitive object={geometry} />;
+}
 
 export function CircleShape({
   outerRadius = 0.07,
   innerRadius = 0.035,
   offset = 0,
+  color = "white",
 }: {
   outerRadius?: number;
   innerRadius?: number;
   offset?: number;
+  color?: ColorRepresentation;
 }) {
   // Create a shape
   const geometry = useMemo(() => {
@@ -26,6 +55,7 @@ export function CircleShape({
     );
     const geometry = new ShapeGeometry(shape);
     geometry.translate(0, 0, offset);
+    setVertexColors(geometry, color);
     return geometry;
   }, [outerRadius, innerRadius, offset]);
 
@@ -34,9 +64,10 @@ export function CircleShape({
 
 export function SquareWithHoleShape({
   radius = 0.089,
+  color = "white",
 }: {
   radius?: number;
-  offset?: number;
+  color?: ColorRepresentation;
 }) {
   const geometry = useMemo(() => {
     const shape = new Shape();
@@ -53,12 +84,19 @@ export function SquareWithHoleShape({
       )
     );
     const geometry = new ShapeGeometry(shape);
+    setVertexColors(geometry, color);
     return geometry;
   }, [radius]);
   return <primitive object={geometry} />;
 }
 
-export function TriangleShape({ rotation = 0 }: { rotation?: number }) {
+export function TriangleShape({
+  rotation = 0,
+  color = "white",
+}: {
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
   // Create a shape
   const geometry = useMemo(() => {
     const shape = new Shape();
@@ -68,22 +106,36 @@ export function TriangleShape({ rotation = 0 }: { rotation?: number }) {
     shape.closePath();
     const geometry = new ShapeGeometry(shape);
     geometry.rotateZ(rotation);
+    setVertexColors(geometry, color);
     return geometry;
   }, [rotation]);
   return <primitive object={geometry} />;
 }
-export function SlopeShape({ rotation = 0 }: { rotation?: number }) {
+export function SlopeShape({
+  rotation = 0,
+  color = "white",
+}: {
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
   const geometry = useMemo(() => {
     const geometry = new PlaneGeometry(0.25, 0.3535533905932738);
     geometry.rotateX(Math.PI / -4);
     geometry.rotateZ(rotation);
     geometry.translate(0, 0, -0.125);
+    setVertexColors(geometry, color);
     return geometry;
   }, []);
   return <primitive object={geometry} />;
 }
 
-export function PyramidShape({ rotation = 0 }: { rotation?: number }) {
+export function PyramidShape({
+  rotation = 0,
+  color = "white",
+}: {
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
   const geometry = useMemo(() => {
     const geometry = new BufferGeometry();
     geometry.setFromPoints([
@@ -93,12 +145,19 @@ export function PyramidShape({ rotation = 0 }: { rotation?: number }) {
     ]);
     geometry.rotateZ(rotation);
     geometry.translate(0, 0, -0.125);
+    setVertexColors(geometry, color);
     return geometry;
   }, []);
   return <primitive object={geometry} />;
 }
 
-export function InvPyramidShape({ rotation = 0 }: { rotation?: number }) {
+export function InvPyramidShape({
+  rotation = 0,
+  color = "white",
+}: {
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
   const geometry = useMemo(() => {
     const geometry = new BufferGeometry();
     geometry.setFromPoints([
@@ -108,7 +167,57 @@ export function InvPyramidShape({ rotation = 0 }: { rotation?: number }) {
     ]);
     geometry.rotateZ(rotation);
     geometry.translate(0, 0, -0.125);
+    setVertexColors(geometry, color);
     return geometry;
+  }, []);
+  return <primitive object={geometry} />;
+}
+
+export function TransmissionShape({
+  radius = 0.0675,
+  centerRatio = 0.8,
+  color = "white",
+}: {
+  radius?: number;
+  centerRatio?: number;
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const innerShape = new Shape().setFromPoints(
+      new Path()
+        .ellipse(
+          0,
+          0,
+          radius * centerRatio,
+          radius * centerRatio,
+          0,
+          Math.PI * 2,
+          true,
+          Math.PI / 8
+        )
+        .getSpacedPoints(8)
+    );
+    const outerShape = new Shape();
+    outerShape.setFromPoints(
+      new Path()
+        .ellipse(0, 0, radius, radius, 0, Math.PI * 2, true, Math.PI / 8)
+        .getSpacedPoints(8)
+    );
+    outerShape.holes.push(innerShape);
+    let geometry1: BufferGeometry = new ShapeGeometry(outerShape);
+
+    setVertexColors(geometry1, color);
+
+    geometry1 = BufferGeometryUtils.toCreasedNormals(geometry1);
+
+    let geometry2: BufferGeometry = new ExtrudeGeometry(innerShape, {
+      depth: -0.003,
+      bevelEnabled: false,
+    });
+
+    setVertexColors(geometry2, "#2d2d2d");
+
+    return BufferGeometryUtils.mergeGeometries([geometry1, geometry2]);
   }, []);
   return <primitive object={geometry} />;
 }
