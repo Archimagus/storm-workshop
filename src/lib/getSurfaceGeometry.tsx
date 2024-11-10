@@ -37,7 +37,12 @@ export function getSurfaceGeometry(surface: Surface) {
       return <Shapes.SquareShape color={getSurfaceColor(surface.transType)} />;
     case 2:
       return (
-        <Shapes.TriangleShape rotation={surfaceRotationToLocal(surface)} />
+        <Shapes.TriangleChunkShape
+          length={1}
+          chunk={0}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
       );
     case 3:
       return (
@@ -57,6 +62,114 @@ export function getSurfaceGeometry(surface: Surface) {
     case 8:
       return (
         <Shapes.InvPyramidShape rotation={surfaceRotationToLocal(surface)} />
+      );
+    case 9:
+      return (
+        <Shapes.TriangleChunkShape
+          length={2}
+          chunk={0}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 10:
+      return (
+        <Shapes.TriangleChunkShape
+          length={2}
+          chunk={1}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 11:
+      return (
+        <Shapes.TriangleChunkShape
+          length={2}
+          chunk={0}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 12:
+      return (
+        <Shapes.TriangleChunkShape
+          length={2}
+          chunk={1}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 13:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={0}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 14:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={1}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 15:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={2}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 16:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={3}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 17:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={0}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 18:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={1}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 19:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={2}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 20:
+      return (
+        <Shapes.TriangleChunkShape
+          length={4}
+          chunk={3}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
       );
     default:
       // Until we figure out what shape things actually are, we'll just use a circle

@@ -300,3 +300,51 @@ export function WeightShape({
   }, [rotation]);
   return <primitive object={geometry} />;
 }
+export function TriangleChunkShape({
+  length,
+  chunk,
+  mirror = false,
+  rotation = 0,
+  color = "white",
+}: {
+  length: number;
+  chunk: number;
+  mirror: boolean;
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const totalWidth = 0.25 * length;
+    const chunkWidth = totalWidth / length;
+    let startX = -0.125;
+    let endX = startX + chunkWidth;
+
+    if (mirror) {
+      startX = endX;
+      endX = startX - chunkWidth;
+    }
+
+    const shape = new Shape();
+    // Calculate the y-coordinates based on the triangle's slope
+    const slope = 0.25 / totalWidth;
+    // Invert the chunk number to make 0 the base
+    const invertedChunk = length - chunk - 1;
+    const startY = -0.125 + slope * (invertedChunk + 1) * chunkWidth;
+    const endY = -0.125 + slope * invertedChunk * chunkWidth;
+
+    shape.moveTo(startX, -0.125);
+    shape.lineTo(startX, startY);
+    shape.lineTo(endX, endY);
+    shape.lineTo(endX, -0.125);
+    shape.closePath();
+
+    const geometry = new ShapeGeometry(shape);
+    if (rotation) {
+      geometry.rotateZ(rotation);
+    }
+    setVertexColors(geometry, color);
+    return geometry;
+  }, [length, chunk, mirror, rotation, color]);
+
+  return <primitive object={geometry} />;
+}
