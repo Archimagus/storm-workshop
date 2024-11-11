@@ -23,6 +23,9 @@ jobs:
         id: check
         uses: EndBug/version-check@v2.1.5
 
+      - name: Set output for version change
+        run: echo "has_new_version=${{ steps.check.outputs.changed }}" >> $GITHUB_ENV
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +57,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
-    if: needs.version-check.outputs.has_new_version == 'true'
+    if: env.has_new_version == 'true'
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
