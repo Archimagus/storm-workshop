@@ -1,5 +1,5 @@
 import { parseMeshFile } from "@/lib/parse_mesh";
-import { useStormworkshop } from "@/StormworkshopProvider";
+import { useStormworkshop } from "@/provider/useStormworkshop";
 import {
   parseModFile,
   parsePartDefinitionFile,

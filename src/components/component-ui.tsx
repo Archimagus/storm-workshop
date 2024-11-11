@@ -1,5 +1,5 @@
 import { Part } from "@/lib/parse_part_definition";
-import { useStormworkshop } from "@/StormworkshopProvider";
+import { useStormworkshop } from "@/provider/useStormworkshop";
 import { FC, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 

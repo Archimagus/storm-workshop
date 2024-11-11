@@ -21,6 +21,8 @@ function setVertexColors(geometry: BufferGeometry, color: ColorRepresentation) {
     new BufferAttribute(new Float32Array(colors), 3)
   );
 }
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* @ts-expect-error not used */
 function debugColors(geometry: BufferGeometry) {
   const colors = [1, 0, 0, 0, 1, 0, 0, 0, 1];
   geometry.setAttribute(
@@ -38,7 +40,7 @@ export function SquareShape({
     const geometry = new PlaneGeometry(0.25, 0.25);
     setVertexColors(geometry, color);
     return geometry;
-  }, []);
+  }, [color]);
   return <primitive object={geometry} />;
 }
 
@@ -64,7 +66,7 @@ export function CircleShape({
     geometry.translate(0, 0, offset);
     setVertexColors(geometry, color);
     return geometry;
-  }, [outerRadius, innerRadius, offset]);
+  }, [outerRadius, innerRadius, offset, color]);
 
   return <primitive object={geometry} />;
 }
@@ -93,7 +95,7 @@ export function SquareWithHoleShape({
     const geometry = new ShapeGeometry(shape);
     setVertexColors(geometry, color);
     return geometry;
-  }, [radius]);
+  }, [radius, color]);
   return <primitive object={geometry} />;
 }
 
@@ -115,7 +117,7 @@ export function TriangleShape({
     geometry.rotateZ(rotation);
     setVertexColors(geometry, color);
     return geometry;
-  }, [rotation]);
+  }, [rotation, color]);
   return <primitive object={geometry} />;
 }
 export function SlopeShape({
@@ -132,7 +134,7 @@ export function SlopeShape({
     geometry.translate(0, 0, -0.125);
     setVertexColors(geometry, color);
     return geometry;
-  }, []);
+  }, [rotation, color]);
   return <primitive object={geometry} />;
 }
 
@@ -155,7 +157,7 @@ export function PyramidShape({
     geometry.rotateZ(rotation);
     geometry.translate(0, 0, -0.125);
     return geometry;
-  }, []);
+  }, [rotation, color]);
   return <primitive object={geometry} />;
 }
 
@@ -178,7 +180,7 @@ export function InvPyramidShape({
     geometry.rotateZ(rotation);
     geometry.translate(0, 0, -0.125);
     return geometry;
-  }, []);
+  }, [rotation, color]);
   return <primitive object={geometry} />;
 }
 
@@ -215,17 +217,14 @@ export function TransmissionShape({
         .getSpacedPoints(8)
     );
     outerShape.holes.push(innerShape);
-    let geometry1: BufferGeometry = new ShapeGeometry(outerShape);
-
+    const geometry1: BufferGeometry = new ShapeGeometry(outerShape);
+    geometry1.computeVertexNormals();
     setVertexColors(geometry1, color);
 
-    geometry1 = BufferGeometryUtils.toCreasedNormals(geometry1);
-
-    let geometry2: BufferGeometry = new ExtrudeGeometry(innerShape, {
+    const geometry2: BufferGeometry = new ExtrudeGeometry(innerShape, {
       depth: -0.003,
       bevelEnabled: false,
     });
-
     setVertexColors(geometry2, "#2d2d2d");
 
     const geometry = BufferGeometryUtils.mergeGeometries([
@@ -234,15 +233,13 @@ export function TransmissionShape({
     ]);
     geometry.rotateZ(rotation);
     return geometry;
-  }, [rotation]);
+  }, [rotation, color, centerRatio, radius]);
   return <primitive object={geometry} />;
 }
 
 export function StaticShape({
-  rotation = 0,
   color = "white",
 }: {
-  rotation?: number;
   color?: ColorRepresentation;
 }) {
   const geometry = useMemo(() => {
@@ -269,15 +266,13 @@ export function StaticShape({
       geometry2,
     ]);
     return geometry3;
-  }, [rotation]);
+  }, [color]);
   return <primitive object={geometry} />;
 }
 
 export function WeightShape({
-  rotation = 0,
   color = "white",
 }: {
-  rotation?: number;
   color?: ColorRepresentation;
 }) {
   const geometry = useMemo(() => {
@@ -306,7 +301,7 @@ export function WeightShape({
       geometry2,
     ]);
     return geometry3;
-  }, [rotation]);
+  }, [color]);
   return <primitive object={geometry} />;
 }
 
@@ -363,13 +358,11 @@ export function TriangleChunkShape({
 export function SlopeChunkShape({
   length,
   chunk,
-  mirror = false,
   rotation = 0,
   color = "white",
 }: {
   length: number;
   chunk: number;
-  mirror: boolean;
   rotation?: number;
   color?: ColorRepresentation;
 }) {
@@ -404,7 +397,7 @@ export function SlopeChunkShape({
     }
 
     return geometry;
-  }, [length, chunk, mirror, rotation, color]);
+  }, [length, chunk, rotation, color]);
 
   return <primitive object={geometry} />;
 }
@@ -412,13 +405,11 @@ export function SlopeChunkShape({
 export function PyramidChunkShape({
   length,
   chunk,
-  mirror = false,
   rotation = 0,
   color = "white",
 }: {
   length: number;
   chunk: number;
-  mirror: boolean;
   rotation?: number;
   color?: ColorRepresentation;
 }) {
@@ -448,7 +439,7 @@ export function PyramidChunkShape({
       geometry.rotateZ(rotation);
     }
     return geometry;
-  }, [length, chunk, mirror, rotation, color]);
+  }, [length, chunk, rotation, color]);
 
   return <primitive object={geometry} />;
 }
@@ -456,13 +447,11 @@ export function PyramidChunkShape({
 export function InvPyramidChunkShape({
   length,
   chunk,
-  mirror = false,
   rotation = 0,
   color = "white",
 }: {
   length: number;
   chunk: number;
-  mirror: boolean;
   rotation?: number;
   color?: ColorRepresentation;
 }) {
@@ -494,7 +483,7 @@ export function InvPyramidChunkShape({
       geometry.rotateZ(rotation);
     }
     return geometry;
-  }, [length, chunk, mirror, rotation, color]);
+  }, [length, chunk, rotation, color]);
 
   return <primitive object={geometry} />;
 }

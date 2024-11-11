@@ -1,6 +1,6 @@
 import { LogicNode } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
-import { useStormworkshop } from "@/StormworkshopProvider";
+import { useStormworkshop } from "@/provider/useStormworkshop";
 import { Billboard, Edges } from "@react-three/drei";
 import { FC, useMemo, useState } from "react";
 import { AlwaysDepth, CircleGeometry } from "three";

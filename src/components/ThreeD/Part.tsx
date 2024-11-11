@@ -1,8 +1,7 @@
 import { Part } from "@/lib/parse_part_definition";
 import { SubPartType } from "@/lib/types";
-import { useStormworkshop } from "@/StormworkshopProvider";
+import { useStormworkshop } from "@/provider/useStormworkshop";
 import { FC, useMemo } from "react";
-import { Vector3Tuple } from "three";
 import { BuoyancySurfaceComponent } from "./BuoyancySurfaceComponent";
 import { LogicNodeComponent } from "./LogicNodeComponent";
 import { SurfaceComponent } from "./SurfaceComponent";
@@ -50,11 +49,11 @@ export const PartComponent: FC<PartComponentProps> = ({ part }) => {
   const mesh1 = meshes[part.mesh_1_name];
   const mesh_editor_only = meshes[part.mesh_editor_only_name];
 
-  const meshPositionOffset: Vector3Tuple = [
-    part.constraint_pos_parent?.x || 0,
-    part.constraint_pos_parent?.y || 0,
-    part.constraint_pos_parent?.z || 0,
-  ];
+  //   const meshPositionOffset: Vector3Tuple = [
+  //     part.constraint_pos_parent?.x || 0,
+  //     part.constraint_pos_parent?.y || 0,
+  //     part.constraint_pos_parent?.z || 0,
+  //   ];
 
   const meshColor = "gray";
 

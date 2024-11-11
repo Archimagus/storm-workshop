@@ -1,6 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SubPartType } from "@/lib/types";
-import { useStormworkshop } from "@/StormworkshopProvider";
+import { useStormworkshop } from "@/provider/useStormworkshop";
 import { Box, Boxes, CircleDot, Grid2X2, Share2, Ship } from "lucide-react";
 
 const subPartTypes = Object.values(SubPartType);

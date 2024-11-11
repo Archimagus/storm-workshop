@@ -4,9 +4,9 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import "./App.css";
 import { ControlsMenu } from "./components/controls-menu";
 import { HoverInfo } from "./components/hover-info";
-import { ThemeProvider } from "./components/theme-provider";
+import { ThemeProvider } from "./components/theme/theme-provider";
 import { Viewer } from "./components/viewer";
-import { StormworkshopProvider } from "./StormworkshopProvider";
+import { StormworkshopProvider } from "./provider/stormworkshop-provider";
 
 function App() {
   return (

@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useFileDropHandler } from "@/hooks/use-file-drop-handler";
-import { useStormworkshop } from "@/StormworkshopProvider";
+import { useStormworkshop } from "@/provider/useStormworkshop";
 import { ChevronDown, ShipWheel } from "lucide-react";
 import { ComponentUI } from "./component-ui";
 import {
@@ -48,7 +48,7 @@ export function AppSidebar() {
                   <input
                     type="file"
                     id="folderInput"
-                    // @ts-ignore
+                    //@ts-expect-error webkitdirectory is not supported in the types
                     webkitdirectory="true"
                     multiple
                     style={{ display: "none" }}

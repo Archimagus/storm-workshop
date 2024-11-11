@@ -1,4 +1,4 @@
-import { useStormworkshop } from "@/StormworkshopProvider";
+import { useStormworkshop } from "@/provider/useStormworkshop";
 import { FC } from "react";
 import { Card, CardContent } from "./ui/card";
 
