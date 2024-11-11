@@ -21,6 +21,13 @@ function setVertexColors(geometry: BufferGeometry, color: ColorRepresentation) {
     new BufferAttribute(new Float32Array(colors), 3)
   );
 }
+function debugColors(geometry: BufferGeometry) {
+  const colors = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+  geometry.setAttribute(
+    "color",
+    new BufferAttribute(new Float32Array(colors), 3)
+  );
+}
 
 export function SquareShape({
   color = "white",
@@ -143,9 +150,10 @@ export function PyramidShape({
       new Vector3(-0.125, -0.125, -0.125),
       new Vector3(0.125, -0.125, 0.125),
     ]);
+    geometry.computeVertexNormals();
+    setVertexColors(geometry, color);
     geometry.rotateZ(rotation);
     geometry.translate(0, 0, -0.125);
-    setVertexColors(geometry, color);
     return geometry;
   }, []);
   return <primitive object={geometry} />;
@@ -165,9 +173,10 @@ export function InvPyramidShape({
       new Vector3(0.125, 0.125, 0.125),
       new Vector3(-0.125, 0.125, -0.125),
     ]);
+    geometry.computeVertexNormals();
+    setVertexColors(geometry, color);
     geometry.rotateZ(rotation);
     geometry.translate(0, 0, -0.125);
-    setVertexColors(geometry, color);
     return geometry;
   }, []);
   return <primitive object={geometry} />;
@@ -300,6 +309,7 @@ export function WeightShape({
   }, [rotation]);
   return <primitive object={geometry} />;
 }
+
 export function TriangleChunkShape({
   length,
   chunk,
@@ -339,10 +349,150 @@ export function TriangleChunkShape({
     shape.closePath();
 
     const geometry = new ShapeGeometry(shape);
+    setVertexColors(geometry, color);
+
     if (rotation) {
       geometry.rotateZ(rotation);
     }
+    return geometry;
+  }, [length, chunk, mirror, rotation, color]);
+
+  return <primitive object={geometry} />;
+}
+
+export function SlopeChunkShape({
+  length,
+  chunk,
+  mirror = false,
+  rotation = 0,
+  color = "white",
+}: {
+  length: number;
+  chunk: number;
+  mirror: boolean;
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const totalWidth = 0.25 * length;
+    const chunkWidth = totalWidth / length;
+    // Calculate the Y-coordinates based on the slope
+    const slope = 0.25 / totalWidth;
+    const invertedChunk = length - chunk - 1;
+    const startY = -0.125 + slope * invertedChunk * chunkWidth;
+    const endY = -0.125 + slope * (invertedChunk + 1) * chunkWidth;
+
+    const startX = -0.125;
+    const endX = 0.125;
+    const startZ = 0;
+    const endZ = -0.25;
+    const vertices = [
+      new Vector3(startX, startY, startZ),
+      new Vector3(endX, startY, startZ),
+      new Vector3(startX, endY, endZ),
+      new Vector3(endX, startY, startZ),
+      new Vector3(endX, endY, endZ),
+      new Vector3(startX, endY, endZ),
+    ];
+    const geometry = new BufferGeometry();
+    geometry.setFromPoints(vertices);
+    geometry.computeVertexNormals();
     setVertexColors(geometry, color);
+
+    if (rotation) {
+      geometry.rotateZ(rotation);
+    }
+
+    return geometry;
+  }, [length, chunk, mirror, rotation, color]);
+
+  return <primitive object={geometry} />;
+}
+
+export function PyramidChunkShape({
+  length,
+  chunk,
+  mirror = false,
+  rotation = 0,
+  color = "white",
+}: {
+  length: number;
+  chunk: number;
+  mirror: boolean;
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const chunkWidth = 0.25;
+    const totalWidth = chunkWidth * length;
+
+    const apex = new Vector3(0.125, -0.125, totalWidth - 0.125);
+    const basePoint1 = new Vector3(-0.125, -0.125, -0.125);
+    const basePoint2 = new Vector3(0.125, 0.125, -0.125);
+
+    const dist1 = chunk / length;
+    const dist2 = (chunk + 1) / length;
+    const point1 = new Vector3().copy(basePoint1).lerp(apex, dist1);
+    const point2 = new Vector3().copy(basePoint2).lerp(apex, dist1);
+    const point3 = new Vector3().copy(basePoint2).lerp(apex, dist2);
+    const point4 = new Vector3().copy(basePoint1).lerp(apex, dist2);
+
+    const vertices = [point1, point3, point2, point1, point4, point3];
+
+    const geometry = new BufferGeometry();
+    geometry.setFromPoints(vertices);
+    geometry.computeVertexNormals();
+    setVertexColors(geometry, color);
+    geometry.translate(0, 0, -0.125 - chunk * 0.25);
+    if (rotation) {
+      geometry.rotateZ(rotation);
+    }
+    return geometry;
+  }, [length, chunk, mirror, rotation, color]);
+
+  return <primitive object={geometry} />;
+}
+
+export function InvPyramidChunkShape({
+  length,
+  chunk,
+  mirror = false,
+  rotation = 0,
+  color = "white",
+}: {
+  length: number;
+  chunk: number;
+  mirror: boolean;
+  rotation?: number;
+  color?: ColorRepresentation;
+}) {
+  const geometry = useMemo(() => {
+    const chunkWidth = 0.25;
+    const totalWidth = chunkWidth * length;
+
+    const apex = new Vector3(-0.125, 0.125, -0.125);
+    const basePoint1 = new Vector3(-0.125, -0.125, totalWidth - 0.125);
+    const basePoint2 = new Vector3(0.125, 0.125, totalWidth - 0.125);
+
+    const invertedChunk = length - chunk - 1;
+
+    const dist1 = invertedChunk / length;
+    const dist2 = (invertedChunk + 1) / length;
+    const point1 = new Vector3().copy(basePoint1).lerp(apex, dist1);
+    const point2 = new Vector3().copy(basePoint2).lerp(apex, dist1);
+    const point3 = new Vector3().copy(basePoint2).lerp(apex, dist2);
+    const point4 = new Vector3().copy(basePoint1).lerp(apex, dist2);
+
+    const vertices = [point1, point2, point3, point1, point3, point4];
+
+    const geometry = new BufferGeometry();
+    geometry.setFromPoints(vertices);
+    geometry.computeVertexNormals();
+    setVertexColors(geometry, color);
+    geometry.translate(0, 0, -0.125 - chunk * 0.25);
+    if (rotation) {
+      geometry.rotateZ(rotation);
+    }
     return geometry;
   }, [length, chunk, mirror, rotation, color]);
 

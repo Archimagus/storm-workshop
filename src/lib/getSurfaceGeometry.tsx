@@ -171,6 +171,150 @@ export function getSurfaceGeometry(surface: Surface) {
           rotation={surfaceRotationToLocal(surface)}
         />
       );
+    case 21:
+      return (
+        <Shapes.SlopeChunkShape
+          length={2}
+          chunk={0}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 22:
+      return (
+        <Shapes.SlopeChunkShape
+          length={2}
+          chunk={1}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 23:
+      return (
+        <Shapes.SlopeChunkShape
+          length={4}
+          chunk={0}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 24:
+      return (
+        <Shapes.SlopeChunkShape
+          length={4}
+          chunk={1}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 25:
+      return (
+        <Shapes.SlopeChunkShape
+          length={4}
+          chunk={2}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 26:
+      return (
+        <Shapes.SlopeChunkShape
+          length={4}
+          chunk={3}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 27:
+      return (
+        <Shapes.PyramidChunkShape
+          length={2}
+          chunk={0}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 28:
+      return (
+        <Shapes.PyramidChunkShape
+          length={2}
+          chunk={1}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 29:
+      return (
+        <Shapes.PyramidChunkShape
+          length={4}
+          chunk={0}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 30:
+      return (
+        <Shapes.PyramidChunkShape
+          length={4}
+          chunk={1}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 31:
+      return (
+        <Shapes.PyramidChunkShape
+          length={4}
+          chunk={2}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 32:
+      return (
+        <Shapes.PyramidChunkShape
+          length={4}
+          chunk={3}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 49:
+      return (
+        <Shapes.InvPyramidChunkShape
+          length={4}
+          chunk={0}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 50:
+      return (
+        <Shapes.InvPyramidChunkShape
+          length={4}
+          chunk={1}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 51:
+      return (
+        <Shapes.InvPyramidChunkShape
+          length={4}
+          chunk={2}
+          mirror={false}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
+    case 52:
+      return (
+        <Shapes.InvPyramidChunkShape
+          length={4}
+          chunk={3}
+          mirror={true}
+          rotation={surfaceRotationToLocal(surface)}
+        />
+      );
     default:
       // Until we figure out what shape things actually are, we'll just use a circle
       return <circleGeometry args={[0.125, 32]} />;
