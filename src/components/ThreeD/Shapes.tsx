@@ -188,7 +188,6 @@ export function TransmissionShape({
   radius = 0.0675,
   centerRatio = 0.8,
   color = "white",
-  rotation = 0,
 }: {
   radius?: number;
   centerRatio?: number;
@@ -231,9 +230,8 @@ export function TransmissionShape({
       geometry1,
       geometry2,
     ]);
-    geometry.rotateZ(rotation);
     return geometry;
-  }, [rotation, color, centerRatio, radius]);
+  }, [color, centerRatio, radius]);
   return <primitive object={geometry} />;
 }
 

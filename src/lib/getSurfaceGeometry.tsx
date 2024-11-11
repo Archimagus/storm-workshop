@@ -34,7 +34,7 @@ export function getSurfaceGeometry(surface: Surface) {
   switch (surface.shape) {
     case 0:
     case 1:
-      return <Shapes.SquareShape color={getSurfaceColor(surface.transType)} />;
+      return <Shapes.SquareShape />;
     case 2:
       return (
         <Shapes.TriangleChunkShape
@@ -46,15 +46,12 @@ export function getSurfaceGeometry(surface: Surface) {
       );
     case 3:
       return (
-        <Shapes.TransmissionShape
-          rotation={surfaceRotationToLocal(surface)}
-          color={getSurfaceColor(surface.transType)}
-        />
+        <Shapes.TransmissionShape color={getSurfaceColor(surface.transType)} />
       );
     case 4:
-      return <Shapes.StaticShape rotation={surfaceRotationToLocal(surface)} />;
+      return <Shapes.StaticShape />;
     case 5:
-      return <Shapes.WeightShape rotation={surfaceRotationToLocal(surface)} />;
+      return <Shapes.WeightShape />;
     case 6:
       return <Shapes.SlopeShape rotation={surfaceRotationToLocal(surface)} />;
     case 7:
@@ -176,7 +173,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.SlopeChunkShape
           length={2}
           chunk={0}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -185,7 +181,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.SlopeChunkShape
           length={2}
           chunk={1}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -194,7 +189,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.SlopeChunkShape
           length={4}
           chunk={0}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -203,7 +197,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.SlopeChunkShape
           length={4}
           chunk={1}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -212,7 +205,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.SlopeChunkShape
           length={4}
           chunk={2}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -221,7 +213,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.SlopeChunkShape
           length={4}
           chunk={3}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -230,7 +221,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.PyramidChunkShape
           length={2}
           chunk={0}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -239,7 +229,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.PyramidChunkShape
           length={2}
           chunk={1}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -248,7 +237,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.PyramidChunkShape
           length={4}
           chunk={0}
-          mirror={true}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -257,7 +245,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.PyramidChunkShape
           length={4}
           chunk={1}
-          mirror={true}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -266,7 +253,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.PyramidChunkShape
           length={4}
           chunk={2}
-          mirror={true}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -275,7 +261,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.PyramidChunkShape
           length={4}
           chunk={3}
-          mirror={true}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -284,7 +269,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.InvPyramidChunkShape
           length={4}
           chunk={0}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -293,7 +277,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.InvPyramidChunkShape
           length={4}
           chunk={1}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -302,7 +285,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.InvPyramidChunkShape
           length={4}
           chunk={2}
-          mirror={false}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
@@ -311,7 +293,6 @@ export function getSurfaceGeometry(surface: Surface) {
         <Shapes.InvPyramidChunkShape
           length={4}
           chunk={3}
-          mirror={true}
           rotation={surfaceRotationToLocal(surface)}
         />
       );
