@@ -1,5 +1,12 @@
 # stormworkshop
 
+## 0.0.3
+
+### Patch Changes
+
+- f98991e: Should only publish new page on version update.
+- 28fa4c3: Many more surfaces
+
 ## 0.0.2
 
 ### Patch Changes
